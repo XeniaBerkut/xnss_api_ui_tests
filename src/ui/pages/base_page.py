@@ -6,3 +6,4 @@ class BasePage(PageFactory):
     def __init__(self, driver: WebDriver):
         super().__init__()
         self.driver = driver
+        self.pf = PageFactory()

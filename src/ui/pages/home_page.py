@@ -1,5 +1,7 @@
 import logging
 
+from selenium.webdriver.common.by import By
+
 from ui.pages.base_page import BasePage
 
 logger = logging.getLogger()
@@ -10,12 +12,14 @@ class HomePage(BasePage):
         super().__init__(driver)
 
     locators = {
-        'sign_up_btn_menu': ('XPATH', '//a[@data-param="menu-cta-1" and @data-testid="button:sign-up"]'),
-        'sign_up_btn_header': ('XPATH', '//a[@data-param="header-cta-1" and @data-testid="button:sign-up"]'),
-        'sign_up_btn_bottom': ('XPATH', '//a[@data-param="st-bottom-cta-1" and @data-testid="button:sign-up"]')
+        'sign_up_btn_menu': (By.XPATH, "//a[contains(@data-param, 'menu') and @data-testid='button:sign-up']"),
+        'sign_up_btn_header': (By.XPATH, '//a[contains(@data-param, "header") and @data-testid="button:sign-up"]'),
+        'sign_up_btn_bottom': (By.XPATH, '//a[contains(@data-param, "bottom") and @data-testid="button:sign-up"]')
     }
 
     def go_to_registration_page(self, driver, registration_btn):
         logger.info(f'Click registration button {registration_btn}')
-        self.registration_btn.click()
-        return driver.current_url
+        element = self.driver.find_element(*self.locators[registration_btn])
+        element.click()
+        logger.info('The registration button was clicked')
+        return driver.window_handles
