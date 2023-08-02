@@ -25,11 +25,11 @@ class HomePage(BasePage):
         logger.info('The registration button was clicked')
 
         logger.info('Check if there are only two active pages')
-        active_pages_count = 2
+        expected_active_pages_count = 2
         active_pages = driver.window_handles
         registration_page = active_pages[1]
 
-        assert len(active_pages) == active_pages_count, f'Expected two active pages, but was {len(active_pages)}'
+        assert len(active_pages) == expected_active_pages_count, f'Expected two active pages, but was {len(active_pages)}'
 
         logger.info("Check if HomePage is still active so RegistrationPage is open in a new window ")
         assert driver.current_url == 'https://www.exness.com/', \
