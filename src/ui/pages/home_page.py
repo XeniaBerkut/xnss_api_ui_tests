@@ -3,6 +3,7 @@ import logging
 from selenium.webdriver.common.by import By
 
 from ui.pages.base_page import BasePage
+from ui.pages.registration_page import RegistrationPage
 
 logger = logging.getLogger()
 
@@ -22,4 +23,15 @@ class HomePage(BasePage):
         element = self.driver.find_element(*self.locators[registration_btn])
         element.click()
         logger.info('The registration button was clicked')
-        return driver.window_handles
+
+        logger.info('Check if there are only two active pages')
+        active_pages = driver.window_handles
+        assert len(active_pages) == 2, f'Expected two active pages, but was {len(active_pages)}'
+
+        logger.info("Check if HomePage is still active so RegistrationPage is open in a new window ")
+        assert driver.current_url == 'https://www.exness.com/', \
+            f'Expected HomePage is active, but was {driver.current_url}'
+
+        logger.info('Switch to RegistrationPage')
+        driver.switch_to.window(active_pages[1])
+        return RegistrationPage(driver)

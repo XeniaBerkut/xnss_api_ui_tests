@@ -29,9 +29,11 @@ pip install -r requirements.txt
 ```
 Export Python path
 ```bash
-export PYTHONPATH=ui:$PYTHONPATH
+export PYTHONPATH=src:$PYTHONPATH
+
 ```
 Run test
 ```bash
-pytest 
+pytest src/ui/tests
+
 ```
