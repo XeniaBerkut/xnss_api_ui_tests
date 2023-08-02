@@ -14,6 +14,7 @@ def test_registration_buttons(driver: WebDriver, btn: RegistrationButtons):
     registration_page = home_page.go_to_registration_page(driver, btn.value)
 
     logger.info('Check if url of RegistrationPage is correct')
-    new_url = registration_page.driver.current_url
-    assert new_url[:38] == 'https://my.exness.com/accounts/sign-up',\
-        f'Expected registration page, but was {new_url}'
+    registration_page_url = registration_page.driver.current_url
+    static_url_part = registration_page_url[:38]
+    assert static_url_part == 'https://my.exness.com/accounts/sign-up',\
+        f'Expected registration page, but was {registration_page_url}'

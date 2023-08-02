@@ -20,18 +20,21 @@ class HomePage(BasePage):
 
     def go_to_registration_page(self, driver, registration_btn):
         logger.info(f'Click registration button {registration_btn}')
-        element = self.driver.find_element(*self.locators[registration_btn])
-        element.click()
+        registration_button = self.driver.find_element(*self.locators[registration_btn])
+        registration_button.click()
         logger.info('The registration button was clicked')
 
         logger.info('Check if there are only two active pages')
+        active_pages_count = 2
         active_pages = driver.window_handles
-        assert len(active_pages) == 2, f'Expected two active pages, but was {len(active_pages)}'
+        registration_page = active_pages[1]
+
+        assert len(active_pages) == active_pages_count, f'Expected two active pages, but was {len(active_pages)}'
 
         logger.info("Check if HomePage is still active so RegistrationPage is open in a new window ")
         assert driver.current_url == 'https://www.exness.com/', \
             f'Expected HomePage is active, but was {driver.current_url}'
 
         logger.info('Switch to RegistrationPage')
-        driver.switch_to.window(active_pages[1])
+        driver.switch_to.window(registration_page)
         return RegistrationPage(driver)
