@@ -18,18 +18,19 @@ class HomePage(BasePage):
         'sign_up_btn_bottom': (By.XPATH, '//a[contains(@data-param, "bottom") and @data-testid="button:sign-up"]')
     }
 
-    def go_to_registration_page(self, driver, registration_btn):
+    def go_to_registration_page(self, driver, registration_btn: str):
         logger.info(f'Click registration button {registration_btn}')
         registration_button = self.driver.find_element(*self.locators[registration_btn])
         registration_button.click()
         logger.info('The registration button was clicked')
 
         logger.info('Check if there are only two active pages')
-        expected_active_pages_count = 2
-        active_pages = driver.window_handles
-        registration_page = active_pages[1]
+        expected_active_pages_count: int = 2
+        active_pages: list[str] = driver.window_handles
+        registration_page: str = active_pages[1]
 
-        assert len(active_pages) == expected_active_pages_count, f'Expected two active pages, but was {len(active_pages)}'
+        assert len(active_pages) == expected_active_pages_count, \
+            f'Expected {expected_active_pages_count} active pages, but was {len(active_pages)}'
 
         logger.info("Check if HomePage is still active so RegistrationPage is open in a new window ")
         assert driver.current_url == 'https://www.exness.com/', \
