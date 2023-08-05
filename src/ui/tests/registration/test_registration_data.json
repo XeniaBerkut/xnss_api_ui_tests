@@ -1,7 +1,10 @@
 [
   {
-    "country": "Armenia",
-    "email": "random@email.am",
-    "password": "ReallyGoodP@ssword1"
+    "test_case_title": "Common user with strong password",
+    "data": {
+      "country": "Armenia",
+      "email": "random@email.am",
+      "password": "ReallyGoodP@ss1"
+    }
   }
 ]

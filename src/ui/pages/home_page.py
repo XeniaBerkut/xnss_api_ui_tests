@@ -20,6 +20,7 @@ class HomePage(BasePage):
 
     def go_to_registration_page(self, driver, registration_btn: str):
         logger.info(f'Click registration button {registration_btn}')
+        BasePage.wait_element_is_visible(self, self.locators[registration_btn], timeout=12)
         registration_button = self.driver.find_element(*self.locators[registration_btn])
         registration_button.click()
         logger.info('The registration button was clicked')
