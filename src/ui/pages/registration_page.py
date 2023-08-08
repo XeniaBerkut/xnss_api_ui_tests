@@ -1,6 +1,9 @@
 import logging
 
 from selenium.webdriver import Keys
+from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 
 from ui.entities.user import User
 from ui.pages.base_page import BasePage
@@ -12,26 +15,54 @@ class RegistrationPage(BasePage):
         super().__init__(driver)
 
     locators = {
-        'country': ('NAME', "country"),
-        'email': ('NAME', "email"),
-        'password': ('NAME', "password"),
-        'sing_up_btn': ('XPATH', '//*[@id="mui-6"]'),
-        'captcha': ('ID', '//*[@id="recaptcha-anchor-label"]')
+        'country': (By.NAME, "country"),
+        'country_control': (By.ID, "mui-2-helper-text"),
+        'email': (By.NAME, "email"),
+        'email_control': (By.ID, "mui-3-helper-text"),
+        'password': (By.NAME, "password"),
+        'pwd_control': (By.ID, "mui-4-helper-text"),
+        'sing_up_btn': (By.ID, "mui-6"),
+        'captcha': (By.ID, "recaptcha-anchor-label")
     }
 
-    def fill_form(self, driver,  user: User):
-        logging.info('Chose country: {}'.format(user.country))
-        print(self.country.get_text())
-        self.country.send_keys(user.country)
-        self.country.send_keys(Keys.RETURN)
-        logging.info('Fill email'.format(user.email))
-        self.email.send_keys(user.email)
-        logging.info('Fill password')
-        self.password.send_keys(user.password)
-        logging.info('Confirm registration')
-        self.sing_up_btn.click()
-        web_trading_page = WebTradingPage(driver)
-        web_trading_page.dismiss_notification()
+    def find_country_by_search_field_and_choose_it(self, country: str):
+        logging.info('Chose country: {}'.format(country))
+        country_field = self.driver.find_element(*self.locators['country'])
+        country_field.send_keys(country)
+        country_field.send_keys(Keys.RETURN)
 
-        web_trading_page.wait_welcome_dialog()
-        return web_trading_page
+    def fill_email(self, email):
+        logging.info('Fill email'.format(email))
+        self.driver.find_element(*self.locators['email']).send_keys(email)
+
+    def fill_password(self, password):
+        logging.info('Fill password')
+        self.driver.find_element(*self.locators['password']).send_keys(password)
+
+    def confirm_registration(self):
+        logging.info('Confirm registration')
+        self.driver.find_element(*self.locators['sing_up_btn']).click()
+
+    def get_page(self, driver):
+        logging.info('Return current page')
+        if self.driver.current_url == 'https://my.exness.com/webtrading/':
+            return WebTradingPage(driver)
+        else:
+            return RegistrationPage(driver)
+
+    def fill_form(self, driver: WebDriver,  user: User):
+
+        self.find_country_by_search_field_and_choose_it(user.country)
+        self.fill_email(user.email)
+        self.fill_password(user.password)
+        self.confirm_registration()
+        return self.get_page(driver)
+
+    def get_control_color(self, page, control_text: str) -> str:
+        logging.info('Get password controls text field')
+        pwd_control: WebElement = page.driver.find_element(*self.locators['pwd_control'])
+        logging.info(f'Get password control "{control_text}" field')
+        control_text_element_xpath: str = f'//span[contains(text(),"{control_text}")]'
+        control_string: WebElement = pwd_control.find_element(By.XPATH, control_text_element_xpath)
+        logging.info('Get color of the text')
+        return control_string.value_of_css_property("color")
