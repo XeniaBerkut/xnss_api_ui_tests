@@ -20,12 +20,14 @@ class HomePage(BasePage):
 
     def go_to_registration_page(self, driver, registration_btn: str):
         logger.info(f'Click registration button {registration_btn}')
-        self.wait_element_is_visible(self.locators[registration_btn], timeout=12)
+        self.wait_element_is_interactable(self.locators[registration_btn], timeout=10)
+
         registration_button = self.driver.find_element(*self.locators[registration_btn])
         registration_button.click()
         logger.info('The registration button was clicked')
 
         logger.info('Check if there are only two active pages')
+        # TODO use number_of_windows_to_be from EC
         expected_active_pages_count: int = 2
         active_pages: list[str] = driver.window_handles
         registration_page: str = active_pages[1]
