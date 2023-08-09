@@ -43,20 +43,19 @@ class RegistrationPage(BasePage):
         logging.info('Confirm registration')
         self.driver.find_element(*self.locators['sing_up_btn']).click()
 
-    def get_page(self, driver):
-        logging.info('Return current page')
-        if self.driver.current_url == 'https://my.exness.com/webtrading/':
-            return WebTradingPage(driver)
-        else:
-            return RegistrationPage(driver)
-
-    def fill_form(self, driver: WebDriver,  user: User):
-
+    def fill_form(self, user: User):
         self.find_country_by_search_field_and_choose_it(user.country)
         self.fill_email(user.email)
         self.fill_password(user.password)
         self.confirm_registration()
-        return self.get_page(driver)
+
+    def fill_form_success(self, driver: WebDriver,  user: User):
+        self.fill_form(user)
+        return WebTradingPage(driver)
+
+    def fill_form_failure(self, driver: WebDriver,  user: User):
+        self.fill_form(user)
+        return RegistrationPage(driver)
 
     def get_control_color(self, page, control_text: str) -> str:
         logging.info('Get password controls text field')
