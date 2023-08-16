@@ -25,8 +25,8 @@ data_registration: dict = get_data("test_registration_data_user.json")
 
 @pytest.mark.order(1)
 @pytest.mark.parametrize("test_case",
-                         get_data_registration,
-                         ids=[data["test_case_title"] for data in get_data_registration])
+                         data_registration,
+                         ids=[data["test_case_title"] for data in data_registration])
 def test_registration(driver: WebDriver, test_case: dict):
     driver.get("https://my.exness.com/accounts/sign-up")
 
@@ -46,8 +46,8 @@ data_pwd_controls: dict = get_data("test_registration_data_pwd_controls.json")
 
 @pytest.mark.order(2)
 @pytest.mark.parametrize("test_case",
-                         get_data_pwd_controls,
-                         ids=[data["test_case_title"] for data in get_data_pwd_controls])
+                         data_pwd_controls,
+                         ids=[data["test_case_title"] for data in data_pwd_controls])
 def test_registration_form_password_controls(driver: WebDriver, test_case: dict):
     logging.info('Go to the RegistrationPage')
     driver.get("https://my.exness.com/accounts/sign-up")
