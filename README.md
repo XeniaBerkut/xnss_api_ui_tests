@@ -1,5 +1,7 @@
 # exness
-Pet Project
+Pet Project.
+
+Due to restrictions(i.e. captcha) I've not written test cases for successful registration.
 ## Run the project
 How to build and run the project
 
