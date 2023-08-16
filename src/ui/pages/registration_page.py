@@ -8,6 +8,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from ui.entities.user import User
 from ui.pages.base_page import BasePage
 from ui.pages.web_trading_page import WebTradingPage
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class RegistrationPage(BasePage):
@@ -15,6 +16,7 @@ class RegistrationPage(BasePage):
         super().__init__(driver)
 
     locators = {
+        'registration_header': (By.XPATH, '//span[contains(text(),"Create an account")]'),
         'country': (By.NAME, "country"),
         'country_control': (By.ID, "mui-2-helper-text"),
         'email': (By.NAME, "email"),
@@ -24,6 +26,16 @@ class RegistrationPage(BasePage):
         'sing_up_btn': (By.ID, "mui-6"),
         'captcha': (By.ID, "recaptcha-anchor-label")
     }
+
+    @property
+    def check_title(self) -> bool:
+        return EC.title_is('Exness Sign Up')
+
+    def check_header(self) -> bool:
+        if EC.presence_of_element_located(self.locators['registration_header']):
+            return True
+        else:
+            return False
 
     def find_country_by_search_field_and_choose_it(self, country: str):
         logging.info('Chose country: {}'.format(country))
@@ -65,3 +77,4 @@ class RegistrationPage(BasePage):
         control_string: WebElement = pwd_control.find_element(By.XPATH, control_text_element_xpath)
         logging.info('Get color of the text')
         return control_string.value_of_css_property("color")
+

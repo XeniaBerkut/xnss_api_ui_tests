@@ -83,9 +83,15 @@ def test_registration_buttons(driver: WebDriver, btn: RegistrationButtons):
     logger.info(f'Go to the Registration page by clicking {btn}')
     registration_page: RegistrationPage = home_page.go_to_registration_page(driver, btn.value)
 
+    logger.info('Check if title is correct')
+    assert registration_page.check_title
+
     logger.info('Check if url of RegistrationPage is correct')
     registration_page_url: str = registration_page.driver.current_url
     expected_static_url_part: str = 'https://my.exness.com/accounts/sign-up'
     # TODO use url_contains from EC
     assert registration_page_url.startswith(expected_static_url_part),\
         f'Expected RegistrationPage, but was {registration_page_url}'
+
+    logger.info('Check if header of registration form is correct')
+    assert registration_page.check_header()
