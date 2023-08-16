@@ -20,7 +20,7 @@ def get_data(test_data_file_name: str) -> dict:
     return test_data
 
 
-get_data_registration: dict = get_data("test_registration_data_user.json")
+data_registration: dict = get_data("test_registration_data_user.json")
 
 
 @pytest.mark.order(1)
@@ -41,7 +41,7 @@ def test_registration(driver: WebDriver, test_case: dict):
          f' as this is a pet project I cannot fix it')
 
 
-get_data_pwd_controls: dict = get_data("test_registration_data_pwd_controls.json")
+data_pwd_controls: dict = get_data("test_registration_data_pwd_controls.json")
 
 
 @pytest.mark.order(2)
