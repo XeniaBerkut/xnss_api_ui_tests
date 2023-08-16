@@ -1,6 +1,5 @@
 import json
 import logging
-import time
 
 import pytest
 
@@ -12,36 +11,43 @@ from ui.pages.home_page import HomePage
 from ui.enums.registration_buttons import RegistrationButtons
 from ui.pages.registration_page import RegistrationPage
 from selenium.webdriver.chrome.webdriver import WebDriver
+from helpers.test_data_helpers import make_test_data_uniq
 
 
-def get_data(test_data_file_name: str) -> list[dict]:
+def get_data(test_data_file_name: str) -> dict:
     with open(test_data_file_name, "r") as f:
         test_data = json.load(f)
     return test_data
 
 
-@pytest.mark.priority(2)
+data_registration: dict = get_data("test_registration_data_user.json")
+
+
+@pytest.mark.order(1)
 @pytest.mark.parametrize("test_case",
-                         get_data("test_registration_data_user.json"),
-                         ids=[data["test_case_title"] for data in get_data("test_registration_data_user.json")])
+                         data_registration,
+                         ids=[data["test_case_title"] for data in data_registration])
 def test_registration(driver: WebDriver, test_case: dict):
     driver.get("https://my.exness.com/accounts/sign-up")
 
-    test_case["data"]["email"] = str(time.time_ns() % 1000000) + test_case["data"]["email"]
+    test_case["data"]["email"] = make_test_data_uniq(test_case["data"]["email"])
     user = User(**test_case["data"])
     registration_page: RegistrationPage = RegistrationPage(driver)
 
-    web_trading_page: WebTradingPage = registration_page.fill_form(driver, user)
+    web_trading_page: WebTradingPage = registration_page.fill_form_success(driver, user)
     web_trading_page.wait_welcome_dialog()
     assert web_trading_page.driver.current_url == 'https://my.exness.com/webtrading/', \
         (f'Expected WebTradingPage, but was {web_trading_page.driver.current_url}. Maybe, because of the captcha,'
          f' as this is a pet project I cannot fix it')
 
 
-@pytest.mark.priority(1)
+data_pwd_controls: dict = get_data("test_registration_data_pwd_controls.json")
+
+
+@pytest.mark.order(2)
 @pytest.mark.parametrize("test_case",
-                         get_data("test_registration_data_pwd_controls.json"),
-                         ids=[data["test_case_title"] for data in get_data("test_registration_data_pwd_controls.json")])
+                         data_pwd_controls,
+                         ids=[data["test_case_title"] for data in data_pwd_controls])
 def test_registration_form_password_controls(driver: WebDriver, test_case: dict):
     logging.info('Go to the RegistrationPage')
     driver.get("https://my.exness.com/accounts/sign-up")
@@ -51,7 +57,7 @@ def test_registration_form_password_controls(driver: WebDriver, test_case: dict)
 
     registration_page: RegistrationPage = RegistrationPage(driver)
     logging.info('Fill registration page')
-    registration_page: RegistrationPage = registration_page.fill_form(driver, user)
+    registration_page: RegistrationPage = registration_page.fill_form_failure(driver, user)
 
     logging.info('Check if registration is not completed and we are still on the RegistrationPage')
     registration_page_url: str = driver.current_url
@@ -68,6 +74,7 @@ def test_registration_form_password_controls(driver: WebDriver, test_case: dict)
         assert control_text_color == expected_color, f'Expected {expected_color} color, but was {control_text_color}'
 
 
+@pytest.mark.order(3)
 @pytest.mark.parametrize("btn", list(RegistrationButtons))
 def test_registration_buttons(driver: WebDriver, btn: RegistrationButtons):
     driver.get("https://www.exness.com/")
