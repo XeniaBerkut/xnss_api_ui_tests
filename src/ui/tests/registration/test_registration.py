@@ -97,11 +97,11 @@ def test_registration_buttons(driver: WebDriver, btn: RegistrationButtons):
     registration_page: RegistrationPage = home_page.go_to_registration_page(driver, btn.value)
 
     logger.info('Check if title is correct')
-    assert registration_page.check_title
+    assert registration_page.is_title_correct
 
     logger.info('Check if url of RegistrationPage is correct')
     assert EC.url_contains(URLS.REGISTRATION_PAGE.value),\
         f'Expected RegistrationPage, but was {driver.current_url}'
 
     logger.info('Check if header of registration form is correct')
-    assert registration_page.check_header()
+    assert registration_page.is_header_located()

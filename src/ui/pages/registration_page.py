@@ -27,15 +27,12 @@ class RegistrationPage(BasePage):
         'captcha': (By.ID, "recaptcha-anchor-label")
     }
 
-    @property
-    def check_title(self) -> bool:
-        return EC.title_is('Exness Sign Up')
+    @staticmethod
+    def is_title_correct() -> bool:
+        return bool(EC.title_is('Exness Sign Up'))
 
-    def check_header(self) -> bool:
-        if EC.presence_of_element_located(self.locators['registration_header']):
-            return True
-        else:
-            return False
+    def is_header_located(self) -> bool:
+        return bool(EC.presence_of_element_located(self.locators['registration_header']))
 
     def find_country_by_search_field_and_choose_it(self, country: str):
         logging.info('Chose country: {}'.format(country))
@@ -77,4 +74,3 @@ class RegistrationPage(BasePage):
         control_string: WebElement = pwd_control.find_element(By.XPATH, control_text_element_xpath)
         logging.info('Get color of the text')
         return control_string.value_of_css_property("color")
-
