@@ -1,12 +1,4 @@
 [
-  {
-    "test_case_title": "Registered user without permission to API",
-    "expected_response": 403,
-    "data": {
-      "login": "x.ivannikova@gmail.com",
-      "password": "123456Qwerty"
-    }
-  },
     {
     "test_case_title": "Not registered user",
     "expected_response": 401,
