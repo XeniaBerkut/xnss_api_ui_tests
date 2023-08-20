@@ -53,7 +53,7 @@ class RegistrationPage(BasePage):
         self.driver.find_element(*self.locators['sing_up_btn']).click()
 
     def fill_form(self, user: User):
-        self.find_country_by_search_field_and_choose_it(user.country)
+        self.select_country_by_typing(user.country)
         self.fill_email(user.email)
         self.fill_password(user.password)
         self.confirm_registration()
