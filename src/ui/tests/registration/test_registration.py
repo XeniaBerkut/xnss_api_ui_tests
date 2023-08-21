@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 
 import pytest
 
@@ -17,7 +18,8 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 def get_data(test_data_file_name: str) -> dict:
-    with open(test_data_file_name, "r") as f:
+    json_path = os.path.join(os.path.dirname(__file__), test_data_file_name)
+    with open(json_path, "r") as f:
         test_data = json.load(f)
     return test_data
 
