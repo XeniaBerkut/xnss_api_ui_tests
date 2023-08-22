@@ -49,7 +49,7 @@ def test_authorisation_faulty(test_case: dict):
     response = requests.post(
         Endpoints.AUTH.value,
         headers=headers,
-        data=json.dumps(user, indent=4)
+        data=user.to_json()
     )
     logger.debug(f"Print response {response.json()}")
     logger.info("Check if status_code is correct")

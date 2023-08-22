@@ -5,9 +5,9 @@ from typing import Optional
 
 @dataclass
 class User:
-    login: str
-    password: Optional[str]
-    token: Optional[str]
+    login: Optional[str] = None
+    password: Optional[str] = None
+    token: Optional[str] = None
 
     def to_json(self):
         user_to_dict = asdict(self)
