@@ -14,14 +14,10 @@ logger = Logger(logging_level='DEBUG')
 @pytest.mark.order(1)
 def test_token_validation(partner_token):
     logger.info("Set header")
-    headers = {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Cookies": "incap_ses_1092_1690367=B/NtIHXo/F7W6xZUMpEnD+u/5GQAAAAAtVIPSSkapkY4CoG0WfJ4gQ==; nlbi_1690367=hRoyAWHl70tds+s4tySDeQAAAAAlHWsUBdMFzsoCshx4GuKh; visid_incap_1690367=8s+FBsQ+SoiTdEMcx3RWX+u/5GQAAAAAQUIPAAAAAADiCTzehVFbE+BUeX5q6k+w",
-        "Connection": "keep-alive",
-        "User-Agent": "PostmanRuntime/7.32.3",
-        "Authorization": partner_token
-    }
+    headers: dict = get_test_data_from_json(os.path.join(
+        os.path.dirname(__file__),
+        "test_authorisation_data_headers.json"))
+    headers["Authorization"] = partner_token
     logger.info("Get auth request")
     response = requests.get(
         Endpoints.TOKEN.value,
@@ -43,10 +39,9 @@ data_auth_fail = get_test_data_from_json(os.path.join(
                          ids=[data["test_case_title"] for data in data_auth_fail])
 def test_authorisation_faulty(test_case: dict):
     logger.info("Set header and body")
-    headers = {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-    }
+    headers: dict = get_test_data_from_json(os.path.join(
+        os.path.dirname(__file__),
+        "test_authorisation_data_headers.json"))
     user = User(**test_case["data"])
 
     logger.info("Request authorisation")

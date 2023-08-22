@@ -32,7 +32,7 @@ class Token:
             headers=headers,
             data=body
         )
-        logger.info(f"Print response {response.json()}")
+        logger.debug(f"Print response {response.json()}")
         assert response.status_code == 200, f'Expected status code 200, but was {response.status_code}'
         logger.info(f"Collect response message")
         response_body: dict = response.json()
