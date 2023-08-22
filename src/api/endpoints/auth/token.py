@@ -20,7 +20,10 @@ class Token:
         logger.info("Prepare request to get token")
         headers = {
             "Content-Type": "application/json",
-            "Accept": "application/json"
+            "Accept": "application/json",
+            "Cookies": "incap_ses_1092_1690367=B/NtIHXo/F7W6xZUMpEnD+u/5GQAAAAAtVIPSSkapkY4CoG0WfJ4gQ==; nlbi_1690367=hRoyAWHl70tds+s4tySDeQAAAAAlHWsUBdMFzsoCshx4GuKh; visid_incap_1690367=8s+FBsQ+SoiTdEMcx3RWX+u/5GQAAAAAQUIPAAAAAADiCTzehVFbE+BUeX5q6k+w",
+            "Connection": "keep-alive",
+            "User-Agent": "PostmanRuntime/7.32.3"
         }
         body = self.user.to_json()
         logger.info("Request token with secret data(login & password")
@@ -29,14 +32,10 @@ class Token:
             headers=headers,
             data=body
         )
-        logger.debug(f"Print response {response.json()}")
+        logger.info(f"Print response {response.json()}")
+        assert response.status_code == 200, f'Expected status code 200, but was {response.status_code}'
         logger.info(f"Collect response message")
         response_body: dict = response.json()
         # TODO delete this part before the latest commit
-        logger.info("As it is a pet project I'm not sure in a success result, "
-                    "so if there is status_code == 403 set one of my received tokens to continue this example test")
-        old_token: dict = get_test_data_from_json("test_authorisation_data_old_token.json")
-        if response.status_code == 403:
-            return "JWT " + old_token["token"]
-        else:
-            return "JWT " + response_body["token"]
+        logger.info("Return token")
+        return "JWT " + response_body["token"]
