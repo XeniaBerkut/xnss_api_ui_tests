@@ -1,4 +1,5 @@
 import json
+import os
 import time
 
 
@@ -7,6 +8,7 @@ def make_test_data_uniq(data) -> str:
 
 
 def get_test_data_from_json(test_data_file_name: str) -> dict:
-    with open(test_data_file_name, "r") as f:
+    json_path = os.path.join(test_data_file_name)
+    with open(json_path, "r") as f:
         test_data = json.load(f)
     return test_data

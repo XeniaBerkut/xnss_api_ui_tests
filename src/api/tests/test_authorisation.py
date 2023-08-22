@@ -1,44 +1,36 @@
-import logging
-import sys
-
+import json
+import os
 import pytest
 import requests
-from requests.models import Response
 
+from api.entities.user import User
+from api.enums.endpoints import Endpoints
 from helpers.test_data_helpers import get_test_data_from_json
+from src.helpers.logger import Logger
 
-
-logger = logging.getLogger()
-handler = logging.StreamHandler(sys.stdout)
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.INFO)
-
-ENDPOINT = "https://my.exnessaffiliates.com/api"
-
-
-
+logger = Logger(logging_level='DEBUG')
 
 
 @pytest.mark.order(1)
-def test_token_validation():
-    logging.info("Set header")
+def test_token_validation(partner_token):
+    logger.info("Set header")
     headers = {
         "Accept": "application/json",
-        "Authorization": get_token()
+        "Authorization": partner_token
     }
-    logging.info("Get auth request")
+    logger.info("Get auth request")
     response = requests.get(
-        ENDPOINT + "/v2/auth/token/",
+        Endpoints.TOKEN.value,
         headers=headers
     )
-    logging.info("Check if status_code is correct")
+    logger.info("Check if status_code is correct")
     assert response.status_code == 200, \
         f'Expected status code 200, but was {response.status_code}'
 
 
-data_auth_fail = get_test_data_from_json("test_authorisation_data.json")
+data_auth_fail = get_test_data_from_json(os.path.join(
+    os.path.dirname(__file__),
+    "test_authorisation_data.json"))
 
 
 @pytest.mark.order(1)
@@ -46,20 +38,20 @@ data_auth_fail = get_test_data_from_json("test_authorisation_data.json")
                          data_auth_fail,
                          ids=[data["test_case_title"] for data in data_auth_fail])
 def test_authorisation_faulty(test_case: dict):
-    logging.info("Set header and body")
+    logger.info("Set header and body")
     headers = {
         "Content-Type": "application/json",
         "Accept": "application/json"
     }
-    body = test_case["data"]
+    user = User(**test_case["data"])
 
-    logging.info("Request authorisation")
+    logger.info("Request authorisation")
     response = requests.post(
-        ENDPOINT + "/v2/auth/",
+        Endpoints.AUTH.value,
         headers=headers,
-        data=body
+        data=json.dumps(user, indent=4)
     )
-    logging.debug(f"Print response {response.json()}")
-    logging.info("Check if status_code is correct")
+    logger.debug(f"Print response {response.json()}")
+    logger.info("Check if status_code is correct")
     assert response.status_code == test_case["expected_response"], \
         f'Expected {test_case["expected_response"]}, but was {response.status_code}'

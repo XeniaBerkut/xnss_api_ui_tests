@@ -1,5 +1,5 @@
-import json
 import logging
+import os
 
 import pytest
 
@@ -15,8 +15,9 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from helpers.test_data_helpers import make_test_data_uniq, get_test_data_from_json
 from selenium.webdriver.support import expected_conditions as EC
 
-
-data_registration: dict = get_test_data_from_json("test_registration_data_user.json")
+data_registration: dict = get_test_data_from_json(os.path.join(
+    os.path.dirname(__file__),
+    "test_registration_data_user.json"))
 
 
 @pytest.mark.order(1)
@@ -37,7 +38,9 @@ def test_registration(driver: WebDriver, test_case: dict):
          f' as this is a pet project I cannot fix it')
 
 
-data_pwd_controls: dict = get_test_data_from_json("test_registration_data_pwd_controls.json")
+data_pwd_controls: dict = get_test_data_from_json(os.path.join(
+    os.path.dirname(__file__),
+    "test_registration_data_pwd_controls.json"))
 
 
 @pytest.mark.order(2)
