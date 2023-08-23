@@ -15,6 +15,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from helpers.test_data_helpers import make_test_data_unique, get_test_data_from_json
 from selenium.webdriver.support import expected_conditions as EC
 
+
 data_registration: dict = get_test_data_from_json(os.path.join(
     os.path.dirname(__file__),
     "test_registration_data_user.json"))
