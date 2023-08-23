@@ -1,9 +1,11 @@
 import logging
 
+from selenium.common import TimeoutException
 from selenium.webdriver import Keys
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support.wait import WebDriverWait
 
 from ui.entities.user import User
 from ui.pages.base_page import BasePage
@@ -27,9 +29,12 @@ class RegistrationPage(BasePage):
         'captcha': (By.ID, "recaptcha-anchor-label")
     }
 
-    @staticmethod
-    def is_title_correct() -> bool:
-        return bool(EC.title_is('Exness Sign Up'))
+    def is_title_correct(self, timeout: int = 10) -> bool:
+        try:
+            WebDriverWait(self.driver, timeout).until(EC.title_is('Exness Sign Up'))
+            return True
+        except TimeoutException:
+            return False
 
     def is_header_located(self) -> bool:
         return bool(EC.presence_of_element_located(self.locators['registration_header']))

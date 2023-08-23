@@ -1,10 +1,9 @@
-import json
 import os
 import pytest
 import requests
 
 from api.entities.user import User
-from api.enums.endpoints import Endpoints
+from api.enums.endpoints.auth import AuthEndpoints
 from helpers.test_data_helpers import get_test_data_from_json
 from src.helpers.logger import Logger
 
@@ -20,7 +19,7 @@ def test_token_validation(partner_token):
     headers["Authorization"] = partner_token
     logger.info("Get auth request")
     response = requests.get(
-        Endpoints.TOKEN.value,
+        AuthEndpoints.TOKEN.value,
         headers=headers
     )
     logger.info("Check if status_code is correct")
@@ -46,7 +45,7 @@ def test_authorisation_faulty(test_case: dict):
 
     logger.info("Request authorisation")
     response = requests.post(
-        Endpoints.AUTH.value,
+        AuthEndpoints.AUTH.value,
         headers=headers,
         data=user.to_json()
     )

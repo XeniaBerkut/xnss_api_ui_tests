@@ -42,9 +42,10 @@ set PYTHONPATH=src:$PYTHONPATH
 
 ```
 Run tests
+
 For UI tests you need to have installed chromedriver and Chrome Browser with compatible versions. 
 ```bash
-pytest src/ui/tests
+pytest src/ui/tests -v
 
 ```
 For API tests you need to make a few preconditions:
@@ -57,8 +58,8 @@ For API tests you need to make a few preconditions:
   "password": "string"
 }
 ```
-After you can run tests
+After that you can run tests
 ```bash
-pytest src/api/tests
+pytest src/api/tests -v
 
 ```

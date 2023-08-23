@@ -12,7 +12,7 @@ from ui.pages.home_page import HomePage
 from ui.enums.registration_buttons import RegistrationButtons
 from ui.pages.registration_page import RegistrationPage
 from selenium.webdriver.chrome.webdriver import WebDriver
-from helpers.test_data_helpers import make_test_data_uniq, get_test_data_from_json
+from helpers.test_data_helpers import make_test_data_unique, get_test_data_from_json
 from selenium.webdriver.support import expected_conditions as EC
 
 data_registration: dict = get_test_data_from_json(os.path.join(
@@ -27,7 +27,7 @@ data_registration: dict = get_test_data_from_json(os.path.join(
 def test_registration(driver: WebDriver, test_case: dict):
     driver.get(URLS.REGISTRATION_PAGE.value)
 
-    test_case["data"]["email"] = make_test_data_uniq(test_case["data"]["email"])
+    test_case["data"]["email"] = make_test_data_unique(test_case["data"]["email"])
     user = User(**test_case["data"])
     registration_page: RegistrationPage = RegistrationPage(driver)
 
@@ -59,7 +59,7 @@ def test_registration_form_password_controls(driver: WebDriver, test_case: dict)
     registration_page: RegistrationPage = registration_page.fill_form_failure(driver, user)
 
     logging.info('Check if registration is not completed and we are still on the RegistrationPage')
-    assert EC.url_contains(URLS.REGISTRATION_PAGE.value), \
+    assert registration_page.url_contains(URLS.REGISTRATION_PAGE.value), \
         f'Expected RegistrationPage, but was {driver.current_url}'
 
     for control in test_case["controlColor"]:
@@ -80,7 +80,7 @@ def test_registration_form_empty_fields(driver: WebDriver):
     logging.info('Click registration button')
     registration_page.confirm_registration()
     # TODO Add asserts for controls
-    assert EC.url_contains(URLS.REGISTRATION_PAGE.value),\
+    assert registration_page.url_contains(URLS.REGISTRATION_PAGE.value),\
         f'Expected RegistrationPage, but was {driver.current_url}'
 
 
@@ -94,7 +94,7 @@ def test_registration_buttons(driver: WebDriver, btn: RegistrationButtons):
     registration_page: RegistrationPage = home_page.go_to_registration_page(driver, btn.value)
 
     logger.info('Check if title is correct')
-    assert registration_page.is_title_correct
+    assert registration_page.is_title_correct()
 
     logger.info('Check if url of RegistrationPage is correct')
     assert EC.url_contains(URLS.REGISTRATION_PAGE.value),\

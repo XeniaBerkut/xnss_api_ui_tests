@@ -1,10 +1,8 @@
-import json
 import requests
 
 from api.entities.user import User
-from api.enums.endpoints import Endpoints
+from api.enums.endpoints.auth import AuthEndpoints
 from requests import Response
-from helpers.test_data_helpers import get_test_data_from_json
 
 from src.helpers.logger import Logger
 
@@ -28,7 +26,7 @@ class Token:
         body = self.user.to_json()
         logger.info("Request token with secret data(login & password")
         response: Response = requests.post(
-            Endpoints.AUTH.value,
+            AuthEndpoints.AUTH.value,
             headers=headers,
             data=body
         )
@@ -38,4 +36,6 @@ class Token:
         response_body: dict = response.json()
         # TODO delete this part before the latest commit
         logger.info("Return token")
-        return "JWT " + response_body["token"]
+        token_prefix = "JWT "
+        token = token_prefix + response_body["token"]
+        return token
