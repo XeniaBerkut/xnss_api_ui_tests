@@ -32,6 +32,31 @@ data_auth_fail = get_test_data_from_json(os.path.join(
     "test_authorisation_data.json"))
 
 
+def test_token_deletion(partner_token):
+    logger.info("Set header")
+    headers: dict = get_test_data_from_json(os.path.join(
+        os.path.dirname(__file__),
+        "test_authorisation_data_headers.json"))
+    headers["Authorization"] = partner_token
+    logger.info("Delete token")
+    response = requests.delete(
+        AuthEndpoints.TOKEN.value,
+        headers=headers
+    )
+    logger.info("Check if status_code is correct")
+    assert response.status_code == 200, \
+        f'Expected status code 200, but was {response.status_code}. '
+
+    logger.info("Check deleted token")
+    response = requests.get(
+        AuthEndpoints.TOKEN.value,
+        headers=headers
+    )
+    logger.info("Check if status_code is correct")
+    assert response.status_code == 401, \
+        f'Expected status code 401, but was {response.status_code}. '
+
+
 @pytest.mark.order(1)
 @pytest.mark.parametrize("test_case",
                          data_auth_fail,

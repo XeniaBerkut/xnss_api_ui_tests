@@ -39,7 +39,7 @@ class RegistrationPage(BasePage):
     def is_header_located(self) -> bool:
         return bool(EC.presence_of_element_located(self.locators['registration_header']))
 
-    def find_country_by_search_field_and_choose_it(self, country: str):
+    def select_country_by_typing(self, country: str):
         logging.info('Chose country: {}'.format(country))
         country_field = self.driver.find_element(*self.locators['country'])
         country_field.send_keys(country)
