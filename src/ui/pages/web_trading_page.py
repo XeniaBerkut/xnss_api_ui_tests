@@ -11,4 +11,4 @@ class WebTradingPage(BasePage):
     }
 
     def wait_welcome_dialog(self):
-        self.wait_element_is_visible(self.locators['welcome_dialog'], timeout=20)
+        self.wait_element_is_interactable(self.locators['welcome_dialog'], timeout=20)

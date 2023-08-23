@@ -1,13 +1,16 @@
 import logging
 
+from selenium.common import TimeoutException
 from selenium.webdriver import Keys
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support.wait import WebDriverWait
 
 from ui.entities.user import User
 from ui.pages.base_page import BasePage
 from ui.pages.web_trading_page import WebTradingPage
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class RegistrationPage(BasePage):
@@ -15,6 +18,7 @@ class RegistrationPage(BasePage):
         super().__init__(driver)
 
     locators = {
+        'registration_header': (By.XPATH, '//span[contains(text(),"Create an account")]'),
         'country': (By.NAME, "country"),
         'country_control': (By.ID, "mui-2-helper-text"),
         'email': (By.NAME, "email"),
@@ -24,6 +28,16 @@ class RegistrationPage(BasePage):
         'sing_up_btn': (By.ID, "mui-6"),
         'captcha': (By.ID, "recaptcha-anchor-label")
     }
+
+    def is_title_correct(self, timeout: int = 10) -> bool:
+        try:
+            WebDriverWait(self.driver, timeout).until(EC.title_is('Exness Sign Up'))
+            return True
+        except TimeoutException:
+            return False
+
+    def is_header_located(self) -> bool:
+        return bool(EC.presence_of_element_located(self.locators['registration_header']))
 
     def find_country_by_search_field_and_choose_it(self, country: str):
         logging.info('Chose country: {}'.format(country))
