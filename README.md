@@ -1,4 +1,4 @@
-# Exness
+# API and UI tests
 This is a Pet Project.
 
 Due to restrictions(i.e. captcha) I didn't create all possible test cases, so consider
@@ -10,11 +10,11 @@ Ensure you have Git and Python3 installed
  
 Clone the project 
 ```bash
-git https://github.com/XeniaBerkut/exness.git
+git https://github.com/XeniaBerkut/xnss_api_ui_tests.git
 ```
 Go to the directory
 ```bash
-cd exness/
+cd xnss_api_ui_tests/
 ```
 ### Run the project via installing environment and requirements
 
