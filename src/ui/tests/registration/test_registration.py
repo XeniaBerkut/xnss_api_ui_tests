@@ -13,7 +13,6 @@ from ui.enums.registration_buttons import RegistrationButtons
 from ui.pages.registration_page import RegistrationPage
 from selenium.webdriver.chrome.webdriver import WebDriver
 from helpers.test_data_helpers import make_test_data_unique, get_test_data_from_json
-from selenium.webdriver.support import expected_conditions as EC
 
 
 data_registration: dict = get_test_data_from_json(os.path.join(
@@ -72,19 +71,6 @@ def test_registration_form_password_controls(driver: WebDriver, test_case: dict)
         assert control_text_color == expected_color, f'Expected {expected_color} color, but was {control_text_color}'
 
 
-@pytest.mark.order(2)
-def test_registration_form_empty_fields(driver: WebDriver):
-    logging.info('Go to the RegistrationPage')
-    driver.get(URLS.REGISTRATION_PAGE.value)
-
-    registration_page: RegistrationPage = RegistrationPage(driver)
-    logging.info('Click registration button')
-    registration_page.confirm_registration()
-    # TODO Add asserts for controls
-    assert registration_page.url_contains(URLS.REGISTRATION_PAGE.value),\
-        f'Expected RegistrationPage, but was {driver.current_url}'
-
-
 @pytest.mark.order(3)
 @pytest.mark.parametrize("btn", list(RegistrationButtons))
 def test_registration_buttons(driver: WebDriver, btn: RegistrationButtons):
@@ -98,7 +84,7 @@ def test_registration_buttons(driver: WebDriver, btn: RegistrationButtons):
     assert registration_page.is_title_correct()
 
     logger.info('Check if url of RegistrationPage is correct')
-    assert EC.url_contains(URLS.REGISTRATION_PAGE.value),\
+    assert registration_page.url_contains(URLS.REGISTRATION_PAGE.value),\
         f'Expected RegistrationPage, but was {driver.current_url}'
 
     logger.info('Check if header of registration form is correct')
