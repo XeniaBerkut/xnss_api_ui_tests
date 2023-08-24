@@ -1,4 +1,4 @@
-# Exness
+# API and UI tests
 This is a Pet Project.
 
 Due to restrictions(i.e. captcha) I didn't create all possible test cases, so consider
