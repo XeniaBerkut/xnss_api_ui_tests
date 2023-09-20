@@ -10,7 +10,7 @@ Ensure you have Git and Python3 installed
  
 Clone the project 
 ```bash
-git https://github.com/XeniaBerkut/xnss_api_ui_tests.git
+git clone https://github.com/XeniaBerkut/xnss_api_ui_tests.git
 ```
 Go to the directory
 ```bash
